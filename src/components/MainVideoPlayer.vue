@@ -13,7 +13,7 @@
         />
       </v-col>
       <v-col cols="12" md="4">
-        <v-btn @click="addToPlaylist" color="primary" block>
+        <v-btn @click="addToPlaylist" color="primary" block style="height: 56px; font-size: 18px;">
           Add to Playlist
         </v-btn>
       </v-col>
@@ -54,23 +54,22 @@
         </v-btn>
 
         <!-- Play/Pause Button -->
-        <v-btn @click="this.isVideoPlaying ? pauseVideo() : playVideo()" icon>
+        <v-btn @click="this.isVideoPlaying ? pauseVideo() : playVideo()" icon  class="button-padding">
           <v-icon>{{ this.isVideoPlaying ? 'mdi-pause' : 'mdi-play' }}</v-icon>
         </v-btn>
-
-          <v-btn @click="muteVideo" icon>
-            <v-icon>mdi-volume-off</v-icon>
-          </v-btn>
-          <v-btn @click="unmuteVideo" icon>
-            <v-icon>mdi-volume-high</v-icon>
-          </v-btn>
-          <v-slider
-            v-model="volume"
-            min="0"
-            max="100"
-            class="volume-slider"
-            hide-details
-          />
+        <v-btn @click="muteVideo" icon class="button-padding">
+          <v-icon>mdi-volume-off</v-icon>
+        </v-btn>
+        <v-btn @click="unmuteVideo" icon  class="button-padding">
+          <v-icon>mdi-volume-high</v-icon>
+        </v-btn>
+        <v-slider
+          v-model="volume"
+          min="0"
+          max="100"
+          class="volume-slider"
+          hide-details
+        />
       </v-col>
     </v-row>
 
@@ -93,10 +92,10 @@
           >
             <v-list-item-title>{{ video.title }}</v-list-item-title>
             <v-list-item-action>
-              <v-btn @click="playVideoFromPlaylist(video.videoId)" color="primary" outlined>
+              <v-btn @click="playVideoFromPlaylist(video.videoId)" color="primary" outlined class="button-padding">
                 Play
               </v-btn>
-              <v-btn @click="removeFromPlaylist(index)" color="red" outlined>
+              <v-btn @click="removeFromPlaylist(index)" color="red" outlined class="button-padding">
                 Remove
               </v-btn>
             </v-list-item-action>
@@ -119,6 +118,7 @@ export default {
       currentTime: 0,
       videoDuration: 0,
       isVideoPlaying: false, // Track if video is playing
+      isMuted: false,
       isPlayerLoaded: false, // Track if video player has loaded
       isDragging: false,  // Track if the user is dragging the slider (video progress)
       draggingIndex: null, // Track if the user is dragging a video in playlist
@@ -159,11 +159,14 @@ export default {
 
     initializePlayer() {
       this.player = new window.YT.Player('player', {
+        height: '540',
+        width: '960',
         videoId: this.videoId,
         playerVars: {
           controls: 0,
           enablejsapi: 1,
           fs: 1,
+
         },
         events: {
           onReady: this.onPlayerReady,
@@ -257,12 +260,14 @@ export default {
     muteVideo() {
       if (this.player) {
         this.player.mute();
+        this.isMuted = true;
       }
     },
 
     unmuteVideo() {
       if (this.player) {
         this.player.unMute();
+        this.isMuted = false;
       }
     },
 
@@ -382,5 +387,8 @@ export default {
   width: 50px; /* Adjust to your desired width */
 }
 
+.button-padding {
+  margin-left: 10px; /* Adjust to your desired width */
+}
 
 </style>
